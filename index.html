@@ -18,15 +18,17 @@
       --cor-fundo: #015586;
       --cor-branca: #ffffff;
       --cor-feriado-fonte: #8b0000; /* Vermelho escuro para dias de feriado */
+      --cor-domingo: #ff8a8a;       /* Vermelho claro para DOM e domingos */
       
       /* Dimensões da Logo Superior (Editável) */
       --logo-comprimento: 200px; /* Largura horizontal da imagem */
       --logo-largura: 80px;      /* Altura vertical da imagem */
       
-      /* Dimensões das Barras e Setas */
+      /* Dimensões das Barras e Botões de Ano */
       --barra-topo-altura: 80px;
       --barra-feriado-altura: 40px;
-      --seta-largura: 150px;
+      --barra-feriado-max-largura: 600px;
+      --botao-ano-largura: 110px;
     }
 
     * {
@@ -91,15 +93,27 @@
     }
 
     /* ==========================================================================
-       BARRA DE PRÓXIMO FERIADO
+       FAIXA COM BOTÕES DE ANO LATERAIS E BARRA DE PRÓXIMOS FERIADOS
        ========================================================================== */
+    .holidays-header-row {
+      width: 100%;
+      max-width: 1020px;
+      padding: 0 20px;
+      margin: 25px 0 20px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
     .next-holiday-bar {
-      height: var(--barra-feriado-altura);
+      min-height: var(--barra-feriado-altura);
+      width: 100%;
+      max-width: var(--barra-feriado-max-largura);
       background-color: var(--cor-branca);
       color: var(--cor-primaria);
       border-radius: 10px;
-      margin: 25px 20px 20px 20px;
-      padding: 0 24px;
+      padding: 8px 20px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -108,108 +122,61 @@
       font-size: 14px;
       text-transform: uppercase;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      max-width: 95%;
       text-align: center;
+      line-height: 1.3;
     }
 
-    /* ==========================================================================
-       ÁREA PRINCIPAL COM SETAS ESTÁTICAS AO LADO DE JANEIRO E MARÇO
-       ========================================================================== */
-    .calendar-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 1420px;
-      padding: 0 20px;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-    }
-
-    .calendar-grid {
-      position: relative;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      width: 100%;
-      max-width: 1020px;
-      align-items: start;
-    }
-
-    .nav-arrow {
-      position: absolute;
-      top: 105px; /* Alinhado ao centro do bloco de Janeiro (esquerda) e Março (direita) */
-      width: var(--seta-largura);
-      height: 52px;
+    .year-nav-btn {
+      width: var(--botao-ano-largura);
+      height: var(--barra-feriado-altura);
       background-color: var(--cor-primaria);
       color: var(--cor-branca);
+      font-family: 'Lexend', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
       border: none;
       border-radius: 10px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
-      transition: opacity 0.2s ease, transform 0.15s ease, background-color 0.2s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+      transition: opacity 0.2s ease, transform 0.15s ease;
+      flex-shrink: 0;
     }
 
-    #prev-year-btn {
-      right: calc(100% + 18px);
-    }
-
-    #next-year-btn {
-      left: calc(100% + 18px);
-    }
-
-    .nav-arrow:hover:not(:disabled) {
+    .year-nav-btn:hover:not(:disabled) {
       opacity: 0.92;
       transform: scale(1.03);
     }
 
-    .nav-arrow:active:not(:disabled) {
+    .year-nav-btn:active:not(:disabled) {
       transform: scale(0.98);
     }
 
-    .nav-arrow:disabled {
+    .year-nav-btn:disabled {
       opacity: 0.35;
       cursor: not-allowed;
       box-shadow: none;
     }
 
-    .nav-arrow svg {
-      width: 34px;
-      height: 22px;
-      stroke: currentColor;
-      stroke-width: 2.4;
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+    /* ==========================================================================
+       GRADE DO CALENDÁRIO (4 linhas x 3 colunas em tela de computador)
+       ========================================================================== */
+    .calendar-wrapper {
+      width: 100%;
+      max-width: 1020px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
     }
 
-    @media (max-width: 1360px) {
-      .nav-arrow {
-        width: 90px;
-      }
-      .nav-arrow svg {
-        width: 28px;
-        height: 20px;
-      }
-    }
-
-    @media (max-width: 1220px) {
-      .calendar-wrapper {
-        flex-wrap: wrap;
-        max-width: 1020px;
-        gap: 12px;
-      }
-      .calendar-grid {
-        order: 1;
-      }
-      .nav-arrow {
-        position: static;
-        order: 2;
-        width: var(--seta-largura);
-        margin-top: 8px;
-      }
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      width: 100%;
+      align-items: start;
     }
 
     @media (max-width: 900px) {
@@ -218,6 +185,13 @@
       }
       .top-bar {
         justify-content: flex-end;
+      }
+      .holidays-header-row {
+        flex-wrap: wrap;
+      }
+      .next-holiday-bar {
+        order: -1;
+        flex-basis: 100%;
       }
     }
 
@@ -237,6 +211,10 @@
       }
       .header-title {
         font-size: 22px;
+      }
+      .year-nav-btn {
+        width: 95px;
+        font-size: 18px;
       }
     }
 
@@ -283,6 +261,10 @@
       text-align: center;
     }
 
+    .weekday.sunday {
+      color: var(--cor-domingo);
+    }
+
     /* Grade dos números dos dias */
     .days-grid {
       display: grid;
@@ -312,6 +294,12 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
+    }
+
+    /* Domingos em vermelho claro */
+    .day-number.sunday {
+      color: var(--cor-domingo);
+      font-weight: 700;
     }
 
     /* Fonte em vermelho escuro para todos os feriados em qualquer ano */
@@ -381,47 +369,39 @@
     </h1>
   </header>
 
-  <!-- Barra Dinâmica de Próximo Feriado -->
-  <div class="next-holiday-bar" id="next-holiday-bar">
-    PRÓXIMO FERIADO: CARREGANDO...
+  <!-- Faixa com Botões de Ano Laterais e Barra de Próximos Feriados -->
+  <div class="holidays-header-row">
+    <button
+      type="button"
+      class="year-nav-btn"
+      id="prev-year-btn"
+      title="Ir para o ano anterior"
+      aria-label="Ir para o ano anterior"
+    ></button>
+
+    <div class="next-holiday-bar" id="next-holiday-bar">
+      PRÓXIMOS FERIADOS: CARREGANDO...
+    </div>
+
+    <button
+      type="button"
+      class="year-nav-btn"
+      id="next-year-btn"
+      title="Ir para o próximo ano"
+      aria-label="Ir para o próximo ano"
+    ></button>
   </div>
 
-  <!-- Área do Calendário com Setas Estáticas ao Lado de Janeiro e Março -->
+  <!-- Grade dos 12 Meses -->
   <div class="calendar-wrapper">
-    <main class="calendar-grid" id="calendar-grid">
-      <button
-        type="button"
-        class="nav-arrow"
-        id="prev-year-btn"
-        title="Ir para o ano anterior"
-        aria-label="Ir para o ano anterior"
-      >
-        <svg viewBox="0 0 36 24" aria-hidden="true">
-          <line x1="31" y1="12" x2="5" y2="12"></line>
-          <polyline points="14,4 5,12 14,20"></polyline>
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        class="nav-arrow"
-        id="next-year-btn"
-        title="Ir para o próximo ano"
-        aria-label="Ir para o próximo ano"
-      >
-        <svg viewBox="0 0 36 24" aria-hidden="true">
-          <line x1="5" y1="12" x2="31" y2="12"></line>
-          <polyline points="22,4 31,12 22,20"></polyline>
-        </svg>
-      </button>
-    </main>
+    <main class="calendar-grid" id="calendar-grid"></main>
   </div>
 
   <script>
     (function() {
       const hoje = new Date();
       // Para testar outras datas, descomente a linha abaixo e ajuste:
-      // const hoje = new Date(2026, 10, 19); // 19 de Novembro de 2026 (mês começa em 0)
+      // const hoje = new Date(2026, 10, 20); // 20 de Novembro de 2026 (mês começa em 0)
 
       const anoVigente = hoje.getFullYear();
       const mesVigente = hoje.getMonth();
@@ -507,48 +487,56 @@
         return listaFeriados;
       }
 
-      const feriadosAnoVigente = obterFeriadosDoAno(anoVigente);
-
-      // Atualiza a barra de "PRÓXIMO FERIADO:" com base na data vigente
-      function atualizarProximoFeriado() {
+      // Atualiza a barra de "PRÓXIMOS FERIADOS:" com os 2 próximos feriados a partir da data vigente
+      function atualizarProximosFeriados() {
         const bar = document.getElementById('next-holiday-bar');
         const hojeSemHora = new Date(anoVigente, mesVigente, diaVigente);
 
-        let proximo = feriadosAnoVigente.find(f => {
-          const dataFeriado = new Date(anoVigente, f.mes, f.dia);
-          return dataFeriado >= hojeSemHora;
-        });
+        const feriadosAtual = obterFeriadosDoAno(anoVigente);
+        const feriadosSeguinte = obterFeriadosDoAno(anoVigente + 1);
 
-        if (!proximo) {
-          const feriadosProximoAno = obterFeriadosDoAno(anoVigente + 1);
-          proximo = feriadosProximoAno[0];
-        }
+        const candidatos = [
+          ...feriadosAtual.map(f => ({ ...f, ano: anoVigente })),
+          ...feriadosSeguinte.map(f => ({ ...f, ano: anoVigente + 1 }))
+        ];
 
-        const diaFormatado = String(proximo.dia).padStart(2, '0');
-        const mesFormatado = String(proximo.mes + 1).padStart(2, '0');
+        const proximosDois = candidatos
+          .filter(f => new Date(f.ano, f.mes, f.dia) >= hojeSemHora)
+          .slice(0, 2);
 
-        bar.textContent = `PRÓXIMO FERIADO: ${diaFormatado}/${mesFormatado} - ${proximo.nome.toUpperCase()}`;
+        const textoFeriados = proximosDois
+          .map(f => {
+            const diaFormatado = String(f.dia).padStart(2, '0');
+            return `${diaFormatado} - ${f.nome.toUpperCase()}`;
+          })
+          .join('; ');
+
+        bar.textContent = `PRÓXIMOS FERIADOS: ${textoFeriados}`;
       }
 
-      atualizarProximoFeriado();
+      atualizarProximosFeriados();
 
       const calendarGrid = document.getElementById('calendar-grid');
       const prevBtn = document.getElementById('prev-year-btn');
       const nextBtn = document.getElementById('next-year-btn');
       const currentYearSpan = document.getElementById('current-year');
 
-      function atualizarEstadoSetas() {
-        prevBtn.disabled = anoExibido <= anoMinimo;
-        nextBtn.disabled = anoExibido >= anoMaximo;
+      function atualizarBotoesAno() {
+        const podeVoltar = anoExibido > anoMinimo;
+        const podeAvancar = anoExibido < anoMaximo;
+
+        prevBtn.disabled = !podeVoltar;
+        nextBtn.disabled = !podeAvancar;
+
+        prevBtn.textContent = podeVoltar ? (anoExibido - 1) : '';
+        nextBtn.textContent = podeAvancar ? (anoExibido + 1) : '';
       }
 
       // Renderiza os 12 blocos mensais para o ano selecionado
       function renderizarCalendario(ano) {
         currentYearSpan.textContent = ano;
-        atualizarEstadoSetas();
-
-        // Remove apenas os cards de meses anteriores, preservando os botões estáticos das setas
-        calendarGrid.querySelectorAll('.month-card').forEach(card => card.remove());
+        atualizarBotoesAno();
+        calendarGrid.innerHTML = '';
 
         const feriadosDoAno = obterFeriadosDoAno(ano);
 
@@ -565,9 +553,12 @@
           // 2. Barra dos Dias da Semana
           const weekdaysBar = document.createElement('div');
           weekdaysBar.className = 'weekdays-bar';
-          diasSemana.forEach(dia => {
+          diasSemana.forEach((dia, idx) => {
             const wd = document.createElement('div');
             wd.className = 'weekday';
+            if (idx === 0) {
+              wd.classList.add('sunday');
+            }
             wd.textContent = dia;
             weekdaysBar.appendChild(wd);
           });
@@ -597,8 +588,14 @@
             num.className = 'day-number';
             num.textContent = d;
 
+            const diaDaSemana = new Date(ano, m, d).getDay();
+            const ehDomingo = diaDaSemana === 0;
             const ehFeriado = diasDeFeriado.has(d);
             const ehHoje = (ano === anoVigente && m === mesVigente && d === diaVigente);
+
+            if (ehDomingo) {
+              num.classList.add('sunday');
+            }
 
             if (ehFeriado) {
               num.classList.add('holiday');
