@@ -18,7 +18,6 @@
       --cor-fundo: #015586;
       --cor-branca: #ffffff;
       --cor-feriado-fonte: #8b0000; /* Vermelho escuro para dias de feriado */
-      --cor-domingo: #ff8a8a;       /* Vermelho claro para DOM e domingos */
       
       /* Dimensões da Logo Superior (Editável) */
       --logo-comprimento: 200px; /* Largura horizontal da imagem */
@@ -261,10 +260,6 @@
       text-align: center;
     }
 
-    .weekday.sunday {
-      color: var(--cor-domingo);
-    }
-
     /* Grade dos números dos dias */
     .days-grid {
       display: grid;
@@ -294,12 +289,6 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-    }
-
-    /* Domingos em vermelho claro */
-    .day-number.sunday {
-      color: var(--cor-domingo);
-      font-weight: 700;
     }
 
     /* Fonte em vermelho escuro para todos os feriados em qualquer ano */
@@ -553,12 +542,9 @@
           // 2. Barra dos Dias da Semana
           const weekdaysBar = document.createElement('div');
           weekdaysBar.className = 'weekdays-bar';
-          diasSemana.forEach((dia, idx) => {
+          diasSemana.forEach(dia => {
             const wd = document.createElement('div');
             wd.className = 'weekday';
-            if (idx === 0) {
-              wd.classList.add('sunday');
-            }
             wd.textContent = dia;
             weekdaysBar.appendChild(wd);
           });
@@ -588,14 +574,8 @@
             num.className = 'day-number';
             num.textContent = d;
 
-            const diaDaSemana = new Date(ano, m, d).getDay();
-            const ehDomingo = diaDaSemana === 0;
             const ehFeriado = diasDeFeriado.has(d);
             const ehHoje = (ano === anoVigente && m === mesVigente && d === diaVigente);
-
-            if (ehDomingo) {
-              num.classList.add('sunday');
-            }
 
             if (ehFeriado) {
               num.classList.add('holiday');
